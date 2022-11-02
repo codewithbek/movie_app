@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/widgets/movie_list_item.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    List<Movie> movies = Movie.movies;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
@@ -49,7 +52,13 @@ class HomeScreen extends StatelessWidget {
                   ])),
               const SizedBox(
                 height: 20.0,
-              )
+              ),
+              for (final movie in movies)
+                MovieListItem(
+                    name: movie.name,
+                    imageUrl: movie.imagePath,
+                    information:
+                        "${movie.year} | ${movie.category} | ${movie.duration.inHours}h ${movie.duration.inMinutes.remainder(60)}m ")
             ],
           ),
         ),
