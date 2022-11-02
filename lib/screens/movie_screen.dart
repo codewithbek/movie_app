@@ -1,9 +1,11 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:video_player/video_player.dart';
 
-class MovieScreend extends StatelessWidget {
-  const MovieScreend({super.key, required this.movie});
+class MovieScreen extends StatelessWidget {
+  const MovieScreen({super.key, required this.movie});
   final Movie movie;
 
   @override
@@ -21,86 +23,83 @@ class MovieScreend extends StatelessWidget {
 
   Positioned _buildAction(BuildContext context) {
     return Positioned(
-            bottom: 50,
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(15.0),
-                      backgroundColor: const Color(0XFFFF7272),
-                      fixedSize:
-                          Size(MediaQuery.of(context).size.width * 0.425, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: RichText(
-                      text: TextSpan(
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(color: Colors.white),
-                        children: [
-                          TextSpan(
-                            text: "Add to ",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          const TextSpan(text: "Watchlist"),
-                        ],
-                      ),
-                    ),
+        bottom: 50,
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(15.0),
+                  backgroundColor: const Color(0XFFFF7272),
+                  fixedSize:
+                      Size(MediaQuery.of(context).size.width * 0.425, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
-                  const SizedBox(
-                    width: 10.0,
+                ),
+                onPressed: () {},
+                child: RichText(
+                  text: TextSpan(
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(color: Colors.white),
+                    children: [
+                      TextSpan(
+                        text: "Add to ",
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const TextSpan(text: "Watchlist"),
+                    ],
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(15.0),
-                      backgroundColor: Colors.white,
-                      fixedSize:
-                          Size(MediaQuery.of(context).size.width * 0.425, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Container()),
-                      );
-                    },
-                    child: RichText(
-                      text: TextSpan(
-                        style: Theme.of(context).textTheme.bodyLarge,
-                        children: [
-                          TextSpan(
-                            text: "Start ",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          const TextSpan(text: "Watching"),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
+                ),
               ),
-            ));
+              const SizedBox(
+                width: 10.0,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(15.0),
+                  backgroundColor: Colors.white,
+                  fixedSize:
+                      Size(MediaQuery.of(context).size.width * 0.425, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => _MoviePlayer(
+                              movie: movie,
+                            )),
+                  );
+                },
+                child: RichText(
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    children: [
+                      TextSpan(
+                        text: "Start ",
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const TextSpan(text: "Watching"),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
   }
 
   Positioned _buildMovieInformation(BuildContext context) {
@@ -188,5 +187,51 @@ class MovieScreend extends StatelessWidget {
         ),
       ),
     ];
+  }
+}
+
+class _MoviePlayer extends StatefulWidget {
+  const _MoviePlayer({Key? key, required this.movie});
+  final Movie movie;
+
+  @override
+  State<_MoviePlayer> createState() => __MoviePlayerState();
+}
+
+class __MoviePlayerState extends State<_MoviePlayer> {
+  late VideoPlayerController videoPlayerController;
+  late ChewieController chewieController;
+
+  @override
+  void initState() {
+    super.initState();
+    videoPlayerController = VideoPlayerController.asset(widget.movie.videoPath)
+      ..initialize().then((value) {
+        setState(() {});
+      });
+
+    chewieController = ChewieController(
+      videoPlayerController: videoPlayerController,
+      aspectRatio: 16 / 9,
+    );
+  }
+
+  @override
+  void dispose() {
+    videoPlayerController.dispose();
+    chewieController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Chewie(
+          controller: chewieController,
+        ),
+      ),
+    );
   }
 }

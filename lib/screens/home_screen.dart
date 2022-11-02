@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MovieScreend(movie: movie)));
+                            builder: (context) => MovieScreen(movie: movie)));
                   },
                   child: MovieListItem(
                       name: movie.name,
