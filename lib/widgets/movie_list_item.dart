@@ -22,12 +22,19 @@ class MovieListItem extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15.0),
           child: Stack(children: [
-            Image.network(
-              imageUrl,
-              width: double.infinity,
-              key: backgroudImageKey,
-              fit: BoxFit.cover,
-            ),
+            Flow(
+                delegate: _ParallaxFlowDelegate(
+                    backgroudImageKey: backgroudImageKey,
+                    listItemContext: context,
+                    scrollable: Scrollable.of(context)!),
+                children: [
+                  Image.network(
+                    imageUrl,
+                    width: double.infinity,
+                    key: backgroudImageKey,
+                    fit: BoxFit.cover,
+                  ),
+                ]),
             Positioned.fill(
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -76,7 +83,6 @@ class _ParallaxFlowDelegate extends FlowDelegate {
     required this.listItemContext,
     required this.backgroudImageKey,
   }) : super(repaint: scrollable.position);
-  @override
   BoxConstraints getConstraitsForChild(int i, BoxConstraints constraints) {
     return BoxConstraints.tightFor(width: constraints.maxWidth);
   }
@@ -100,11 +106,21 @@ class _ParallaxFlowDelegate extends FlowDelegate {
             .size;
 
     final listItemSize = context.size;
+    final childRect = verticalAligment.inscribe(
+      backgroudSize,
+      Offset.zero & listItemSize,
+    );
+    // Paint the backgroud
+
+    context.paintChild(0,
+        transform:
+            Transform.translate(offset: Offset(0.0, childRect.top)).transform);
   }
 
   @override
-  bool shouldRepaint(covariant FlowDelegate oldDelegate) {
-    // TODO: implement shouldRepaint
-    throw UnimplementedError();
+  bool shouldRepaint(covariant _ParallaxFlowDelegate oldDelegate) {
+    return scrollable != oldDelegate.scrollable ||
+        listItemContext != oldDelegate.listItemContext ||
+        backgroudImageKey != oldDelegate.backgroudImageKey;
   }
 }

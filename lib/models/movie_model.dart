@@ -23,7 +23,7 @@ class Movie {
         videoPath: "assets/videos/example.mp4",
         category: "Thriller",
         year: 2010,
-        duration: Duration(hours: 2, minutes: 35)),
+        duration: const Duration(hours: 2, minutes: 35)),
     Movie(
         name: "Smoking",
         imagePath:
@@ -31,7 +31,7 @@ class Movie {
         videoPath: "assets/videos/example.mp4",
         category: "Comedy",
         year: 2016,
-        duration: Duration(hours: 1, minutes: 50)),
+        duration: const Duration(hours: 1, minutes: 50)),
     Movie(
         name: "Doctor Strange",
         imagePath:
@@ -39,7 +39,7 @@ class Movie {
         videoPath: "assets/videos/example.mp4",
         category: "Fantastic",
         year: 2022,
-        duration: Duration(hours: 2, minutes: 30)),
+        duration: const Duration(hours: 2, minutes: 30)),
     Movie(
         name: "No Way Home",
         imagePath:
@@ -47,7 +47,7 @@ class Movie {
         videoPath: "assets/videos/example.mp4",
         category: "Fantastic",
         year: 2022,
-        duration: Duration(hours: 1, minutes: 40)),
+        duration: const Duration(hours: 1, minutes: 40)),
     Movie(
         name: "Student of The Year",
         imagePath:
@@ -55,7 +55,7 @@ class Movie {
         videoPath: "assets/videos/example.mp4",
         category: "Romantic",
         year: 2018,
-        duration: Duration(hours: 1, minutes: 40)),
+        duration: const Duration(hours: 1, minutes: 40)),
     Movie(
         name: "Krrish",
         imagePath:
@@ -63,6 +63,6 @@ class Movie {
         videoPath: "assets/videos/example.mp4",
         category: "Fantastic",
         year: 2012,
-        duration: Duration(hours: 1, minutes: 40)),
+        duration: const Duration(hours: 1, minutes: 40)),
   ];
 }

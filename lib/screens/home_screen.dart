@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/screens/movie_screen.dart';
 import 'package:movie_app/widgets/movie_list_item.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -54,11 +55,19 @@ class HomeScreen extends StatelessWidget {
                 height: 20.0,
               ),
               for (final movie in movies)
-                MovieListItem(
-                    name: movie.name,
-                    imageUrl: movie.imagePath,
-                    information:
-                        "${movie.year} | ${movie.category} | ${movie.duration.inHours}h ${movie.duration.inMinutes.remainder(60)}m ")
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MovieScreend(movie: movie)));
+                  },
+                  child: MovieListItem(
+                      name: movie.name,
+                      imageUrl: movie.imagePath,
+                      information:
+                          "${movie.year} | ${movie.category} | ${movie.duration.inHours}h ${movie.duration.inMinutes.remainder(60)}m "),
+                )
             ],
           ),
         ),
